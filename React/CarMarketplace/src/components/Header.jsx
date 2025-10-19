@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { ethers } from "ethers";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   const [isConnected, setIsConnected] = useState(false);
@@ -23,17 +23,22 @@ export default function Header() {
   }
 
   return (
-    <div className="bg-black flex justify-between items-center p-3 h-25">
-      <h1 className="text-3xl text-white">Web3 Car Marketplace</h1>
+    <div className="bg-black flex justify-between items-center p-3 h-25 border-b-2 border-white">
+      <div>
+        <h1 className="text-3xl text-white ml-5">
+          <Link to="/">Web3 Car Marketplace</Link>
+        </h1>
+      </div>
+
       <div className="flex gap-6">
         <button
           onClick={connectWallet}
-          className="border border-white text-white p-2 rounded-xl hover:scale-102 h-12"
+          className="border border-white text-white p-2 rounded-xl hover:scale-102 h-auto"
         >
           {isConnected === true ? "Connected to: " + account : "Connect Wallet"}
         </button>
-        <button className="border border-white text-white p-2 rounded-xl hover:scale-102 h-12">
-          List Your Car
+        <button className="border border-white text-white p-2 rounded-xl hover:scale-102 h-auto">
+          <Link to="/list">List Your Car</Link>
         </button>
       </div>
     </div>

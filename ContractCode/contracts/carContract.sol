@@ -7,7 +7,6 @@ contract CarMarketplace {
         string make;
         string model;
         uint year;
-        string imgURL;
         uint price;
         address payable seller;
         address buyer;
@@ -35,7 +34,6 @@ contract CarMarketplace {
         string calldata _make,
         string calldata _model,
         uint _year,
-        string calldata _imgURL,
         uint _price
     ) external {
         require(_price > 0, "Price must be more than 0");
@@ -45,7 +43,6 @@ contract CarMarketplace {
             make: _make,
             model: _model,
             year: _year,
-            imgURL: _imgURL,
             price: _price,
             seller: payable(msg.sender),
             buyer: address(0),

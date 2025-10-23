@@ -31,6 +31,7 @@ export default function CarGrid() {
         price: ethers.formatEther(car.price),
         seller: car.seller,
         sold: car.sold,
+        imageUrl: car.imageUrl,
       }));
 
       console.log(formattedCars);
@@ -59,6 +60,7 @@ export default function CarGrid() {
               year={car.year}
               price={car.price}
               seller={car.seller}
+              imageUrl={car.imageUrl}
             ></Card>
           ))}
         </div>

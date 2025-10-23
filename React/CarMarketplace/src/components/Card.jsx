@@ -1,48 +1,80 @@
+import { useState } from "react";
 import { getCarMarketplaceContract } from "../contract";
 import { ethers } from "ethers";
+import { getIPFSUrl } from "../ipfs";
 
-export default function Card({ id, make, model, year, price, seller }) {
+export default function Card({
+  id,
+  make,
+  model,
+  year,
+  price,
+  seller,
+  imageUrl,
+}) {
+  const [buying, setBuying] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
   async function buyCar() {
+    setBuying(true);
+
     try {
       const contract = await getCarMarketplaceContract();
-      const tx = await contract.buyCar(id, { value: ethers.parseEther(price) });
+      const priceInWei = ethers.parseEther(price);
+      const tx = await contract.buyCar(id, { value: priceInWei });
       await tx.wait();
-
-      alert("Car purchased");
+      alert("Car purchased successfully! 🎉");
       window.location.reload();
     } catch (error) {
-      alert("Error Buying Car");
-      console.error("Error Buying Car", error);
+      console.error("Error buying car:", error);
+      alert("Error buying car: " + error.message);
+    } finally {
+      setBuying(false);
     }
   }
 
+  const shortenAddress = (address) => {
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
+
   return (
-    <div className="max-w-auto w-full bg-white border border-gray-200 rounded-xl shadow-lg m-4 flex flex-col justify-between">
-      <div className="p-5 flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold text-gray-900 break-words">
-          {make} {model} {year}
+    <div className="max-w-auto bg-white border border-white text-black rounded-lg m-4 overflow-hidden">
+      <div className="w-full h-48 bg-gray-200 overflow-hidden">
+        {!imageError && imageUrl ? (
+          <img
+            src={getIPFSUrl(imageUrl)}
+            alt={`${make} ${model}`}
+            className="w-full h-full object-cover"
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-300">
+            <span className="text-gray-500 text-4xl">🚗</span>
+          </div>
+        )}
+      </div>
+
+      <div className="p-4">
+        <h1 className="mb-2 text-3xl font-bold text-black">
+          {make} {model}
         </h1>
-        <p className="text-gray-500 text-sm">
-          <span className="font-medium text-gray-700">Seller:</span>
-          <span
-            className="inline-block max-w-[160px] align-middle ml-1 truncate"
-            title={seller}
-          >
-            {seller}
-          </span>
-        </p>
-        <p className="text-xl font-bold text-black">
-          {price} <span className="font-normal">ETH</span>
+
+        <p className="mb-3 text-2xl text-black">Year: {year}</p>
+
+        <p className="text-1xl font-bold text-red-500">{price} ETH</p>
+
+        <p className="text-sm text-gray-600 mt-2">
+          Seller: {shortenAddress(seller)}
         </p>
       </div>
-      <div className="p-5 pt-0 flex justify-end">
-        <button
-          onClick={buyCar}
-          className="bg-blue-600 text-white rounded-lg px-5 py-2 hover:bg-blue-700 transition font-semibold shadow"
-        >
-          Buy Car
-        </button>
-      </div>
+
+      <button
+        className="bg-blue-500 hover:bg-blue-600 rounded p-2 mb-2 mr-2 float-right text-white transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+        onClick={buyCar}
+        disabled={buying}
+      >
+        {buying ? "Buying..." : "Buy Car"}
+      </button>
     </div>
   );
 }

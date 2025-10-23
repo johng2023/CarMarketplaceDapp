@@ -2,7 +2,7 @@ import CarMarketplace from "/Users/johnguckian/Car-Marketplace/ContractCode/arti
 import { ethers } from "ethers";
 
 export const carMarketplaceAddress =
-  "0xA6b972AC25bd4b3EA3cFD5251BC533682FFd4303";
+  "0x5275984bD80CfB8DDC170bDC3643cfeAd1727943";
 
 export const carMarketplaceABI = CarMarketplace.abi;
 

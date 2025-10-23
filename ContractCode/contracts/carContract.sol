@@ -8,6 +8,7 @@ contract CarMarketplace {
         string model;
         uint year;
         uint price;
+        string imageUrl;
         address payable seller;
         address buyer;
         bool sold;
@@ -21,6 +22,7 @@ contract CarMarketplace {
         string make,
         string model,
         uint price,
+        string imageUrl,
         address indexed seller
     );
     event CarSold(
@@ -34,9 +36,11 @@ contract CarMarketplace {
         string calldata _make,
         string calldata _model,
         uint _year,
-        uint _price
+        uint _price,
+        string calldata _imageUrl
     ) external {
         require(_price > 0, "Price must be more than 0");
+        require(bytes(_imageUrl).length > 0, "Image URL required");
         carCount++;
         cars[carCount] = Car({
             id: carCount,
@@ -44,12 +48,13 @@ contract CarMarketplace {
             model: _model,
             year: _year,
             price: _price,
+            imageUrl: _imageUrl,
             seller: payable(msg.sender),
             buyer: address(0),
             sold: false
         });
 
-        emit CarListed(carCount, _make, _model, _price, msg.sender);
+        emit CarListed(carCount, _make, _model, _price, _imageUrl, msg.sender);
     }
 
     function buyCar(uint _carId) public payable {

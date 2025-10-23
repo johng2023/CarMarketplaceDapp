@@ -6,8 +6,8 @@ module.exports = {
   solidity: "0.8.30",
   networks: {
     sepolia: {
-      url: process.dotenv.INFURA_SEPOLIA_URL,
-      accounts: [process.dotenv.PRIVATEKEY],
+      url: process.env.INFURA_SEPOLIA_URL,
+      accounts: [process.env.PRIVATEKEY],
     },
   },
 };
